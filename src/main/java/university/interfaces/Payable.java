@@ -1,4 +1,6 @@
 package university.interfaces;
 
-public class Payable {
+public interface Payable {
+    void setPaid(boolean paid);
+    boolean isPaid();
 }
