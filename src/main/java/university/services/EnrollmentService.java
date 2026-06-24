@@ -99,6 +99,19 @@ public class EnrollmentService {
         return null;
     }
 
+    public void showUnpaidEnrollments() {
+        boolean found = false;
+        for (int i = 0; i < size; i++) {
+            if (!enrollments[i].isPaid()) {
+                System.out.println("Студент: " + enrollments[i].getStudent().getName() +
+                        " (ID: " + enrollments[i].getStudent().getId() + ") " +
+                        "| Неоплачений курс: " + enrollments[i].getCourse().getTitle());
+                found = true;
+            }
+        }
+        if (!found) System.out.println("Усі курси оплачені! Заборгованостей немає.");
+    }
+
     public Enrollment[] getEnrollments() { return enrollments; }
     public int getSize() { return size; }
 }
