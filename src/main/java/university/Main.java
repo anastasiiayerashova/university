@@ -274,18 +274,4 @@ public class Main {
             System.out.println("Невірний вибір.");
         }
     }
-
-    private static void initTestData() {
-        studentService.addStudent("Антонов Антон", "anton@test.com", 1);
-        studentService.addStudent("Борисов Борис", "boris@test.com", 2);
-        studentService.addStudent("Сергій Сергій", "ser@test.com", 3);
-        teacherService.addTeacher("Дмитро Олександрович", "dmitro@univ.com", TeacherPosition.PROFESSOR);
-        courseService.addCourse("Вступ до Java", 5, 1);
-        courseService.addCourse("Math", 4, 1);
-
-        enrollmentService.enrollStudent(1, 1, "2026-1");
-        enrollmentService.enrollStudent(1, 2, "2026-1");
-        enrollmentService.setGrade(1, 1, Grade.A);
-        enrollmentService.setGrade(1, 2, Grade.B);
-    }
 }
