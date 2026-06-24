@@ -63,3 +63,20 @@ src/
 3. Перейдіть до файлу src/main/java/university/Main.java
 
 4. Запустіть метод main (натисніть зелений трикутник Run)
+
+## 👩‍💻 About the Author
+
+**Anastasiia Yerashova** — Junior Backend Developer passionate about writing clean and efficient code, growing professionally, and collaborating with purpose-driven teams
+
+> "I'm a Junior Backend Developer with a strong commitment to building reliable and maintainable solutions.
+> I strive to grow professionally by taking on meaningful challenges and collaborating with motivated teams.
+> I approach each task with responsibility and dedication, always aiming to deliver my best work.
+> My adaptability and eagerness to learn help me stay effective in dynamic, fast-paced environments"
+
+## 📫 Contact
+
+- [LinkedIn](www.linkedin.com/in/anastasia-yerashova)
+- [GitHub](https://github.com/anastasiiayerashova)
+- Email: yerashova.a@gmail.com
+
+> Thank you for checking out the project! If you found it helpful or interesting, feel free to leave a ⭐ on the repository.
