@@ -1,4 +1,8 @@
 package university.enums;
 
-public class StudentStatus {
+public enum StudentStatus {
+    ACTIVE,
+    ON_LEAVE,
+    EXPELLED,
+    GRADUATED
 }

@@ -1,4 +1,7 @@
 package university.enums;
 
-public class TeacherPosition {
+public enum TeacherPosition {
+    ASSISTANT,
+    LECTURER,
+    PROFESSOR
 }
