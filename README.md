@@ -75,7 +75,6 @@ src/
 
 ## 📫 Contact
 
-- [Telegram](@anastassiia_y)
 - [LinkedIn](www.linkedin.com/in/anastasia-yerashova)
 - [GitHub](https://github.com/anastasiiayerashova)
 - Email: yerashova.a@gmail.com
