@@ -112,6 +112,30 @@ public class StudentService {
         }
     }
 
+    //status filter
+    public void filterStudentsByStatus(StudentStatus status) {
+        boolean found = false;
+        for (int i = 0; i < size; i++) {
+            if (students[i].getStatus() == status) {
+                System.out.println(students[i]);
+                found = true;
+            }
+        }
+        if (!found) System.out.println("Студентів із таким статусом не знайдено.");
+    }
+
+    //year filter
+    public void filterStudentsByYear(int year) {
+        boolean found = false;
+        for (int i = 0; i < size; i++) {
+            if (students[i].getStudyYear() == year) {
+                System.out.println(students[i]);
+                found = true;
+            }
+        }
+        if (!found) System.out.println("Студентів на " + year + "-му курсі не знайдено.");
+    }
+
     public Student[] getStudents() { return students; }
     public int getSize() { return size; }
 }

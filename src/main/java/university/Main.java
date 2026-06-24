@@ -59,9 +59,11 @@ public class Main {
         System.out.println("1. Додати студента");
         System.out.println("2. Показати всіх (оригінальний порядок)");
         System.out.println("3. Показати всіх (сортування за ПІБ)");
-        System.out.println("4. Оновити дані");
+        System.out.println("4. Оновити дані студента");
         System.out.println("5. Змінити статус студента");
-        System.out.println("6. Видалити студента");
+        System.out.println("6. Фільтр за статусом");
+        System.out.println("7. Фільтр за роком навчання");
+        System.out.println("8. Видалити студента");
         System.out.print("Вибір: ");
 
         int choice = Integer.parseInt(scanner.nextLine());
@@ -97,6 +99,20 @@ public class Main {
                 studentService.changeStatus(stId, status);
                 break;
             case 6:
+                System.out.println("Оберіть статус для фільтрації (1 - ACTIVE, 2 - ON_LEAVE, 3 - EXPELLED, 4 - GRADUATED):");
+                int fChoice = Integer.parseInt(scanner.nextLine());
+                StudentStatus fStatus = StudentStatus.ACTIVE;
+                if (fChoice == 2) fStatus = StudentStatus.ON_LEAVE;
+                if (fChoice == 3) fStatus = StudentStatus.EXPELLED;
+                if (fChoice == 4) fStatus = StudentStatus.GRADUATED;
+                studentService.filterStudentsByStatus(fStatus);
+                break;
+            case 7:
+                System.out.print("Введіть рік навчання для фільтрації: ");
+                int fYear = Integer.parseInt(scanner.nextLine());
+                studentService.filterStudentsByYear(fYear);
+                break;
+            case 8:
                 System.out.print("ID студента для видалення: "); int delId = Integer.parseInt(scanner.nextLine());
                 studentService.deleteStudent(delId);
                 break;
@@ -109,25 +125,43 @@ public class Main {
         System.out.println("\n--- Меню Викладачів ---");
         System.out.println("1. Додати викладача");
         System.out.println("2. Показати всіх");
+        System.out.println("3. Оновити дані викладача");
+        System.out.println("4. Видалити викладача");
         System.out.print("Вибір: ");
 
         int choice = Integer.parseInt(scanner.nextLine());
 
-        if (choice == 1) {
-            System.out.print("ПІБ: "); String name = scanner.nextLine();
-            System.out.print("Email: "); String email = scanner.nextLine();
-            System.out.println("Посада (1 - ASSISTANT, 2 - LECTURER, 3 - PROFESSOR): ");
-
-            int posChoice = Integer.parseInt(scanner.nextLine());
-
-            TeacherPosition pos = TeacherPosition.ASSISTANT;
-            if (posChoice == 2) pos = TeacherPosition.LECTURER;
-            if (posChoice == 3) pos = TeacherPosition.PROFESSOR;
-
-            teacherService.addTeacher(name, email, pos);
-        }
-        else if (choice == 2) {
-            teacherService.showAllTeachers();
+        switch (choice) {
+            case 1:
+                System.out.print("ПІБ: "); String name = scanner.nextLine();
+                System.out.print("Email: "); String email = scanner.nextLine();
+                System.out.println("Посада (1 - ASSISTANT, 2 - LECTURER, 3 - PROFESSOR): ");
+                int posChoice = Integer.parseInt(scanner.nextLine());
+                TeacherPosition pos = TeacherPosition.ASSISTANT;
+                if (posChoice == 2) pos = TeacherPosition.LECTURER;
+                if (posChoice == 3) pos = TeacherPosition.PROFESSOR;
+                teacherService.addTeacher(name, email, pos);
+                break;
+            case 2:
+                teacherService.showAllTeachers();
+                break;
+            case 3:
+                System.out.print("ID викладача для оновлення: "); int tId = Integer.parseInt(scanner.nextLine());
+                System.out.print("Нове ПІБ: "); String tName = scanner.nextLine();
+                System.out.print("Новий Email: "); String tEmail = scanner.nextLine();
+                System.out.println("Нова посада (1 - ASSISTANT, 2 - LECTURER, 3 - PROFESSOR): ");
+                int tPosChoice = Integer.parseInt(scanner.nextLine());
+                TeacherPosition tPos = TeacherPosition.ASSISTANT;
+                if (tPosChoice == 2) tPos = TeacherPosition.LECTURER;
+                if (tPosChoice == 3) tPos = TeacherPosition.PROFESSOR;
+                teacherService.updateTeacher(tId, tName, tEmail, tPos);
+                break;
+            case 4:
+                System.out.print("ID викладача для видалення: "); int tDelId = Integer.parseInt(scanner.nextLine());
+                teacherService.deleteTeacher(tDelId);
+                break;
+            default:
+                System.out.println("Невірний вибір.");
         }
     }
 
@@ -135,18 +169,47 @@ public class Main {
         System.out.println("\n--- Меню Курсів ---");
         System.out.println("1. Створити курс");
         System.out.println("2. Показати всі");
+        System.out.println("3. Фільтр курсів за викладачем");
+        System.out.println("4. Фільтр курсів за кредитами");
+        System.out.println("5. Оновити дані курсу");
+        System.out.println("6. Видалити курс");
         System.out.print("Вибір: ");
 
         int choice = Integer.parseInt(scanner.nextLine());
 
-        if (choice == 1) {
-            System.out.print("Назва курсу: "); String title = scanner.nextLine();
-            System.out.print("Кількість кредитів: "); int credits = Integer.parseInt(scanner.nextLine());
-            System.out.print("ID викладача: "); int teacherId = Integer.parseInt(scanner.nextLine());
-            courseService.addCourse(title, credits, teacherId);
-        }
-        else if (choice == 2) {
-            courseService.showAllCourses();
+        switch (choice) {
+            case 1:
+                System.out.print("Назва курсу: "); String title = scanner.nextLine();
+                System.out.print("Кредити: "); int credits = Integer.parseInt(scanner.nextLine());
+                System.out.print("ID викладача: "); int teacherId = Integer.parseInt(scanner.nextLine());
+                courseService.addCourse(title, credits, teacherId);
+                break;
+            case 2:
+                courseService.showAllCourses();
+                break;
+            case 3:
+                System.out.print("Введіть ID викладача: ");
+                int tId = Integer.parseInt(scanner.nextLine());
+                courseService.filterCoursesByTeacher(tId);
+                break;
+            case 4:
+                System.out.print("Введіть кількість кредитів: ");
+                int cr = Integer.parseInt(scanner.nextLine());
+                courseService.filterCoursesByCredits(cr);
+                break;
+            case 5:
+                System.out.print("ID курсу для оновлення: "); int cId = Integer.parseInt(scanner.nextLine());
+                System.out.print("Нова назва: "); String cTitle = scanner.nextLine();
+                System.out.print("Нова кількість кредитів: "); int cCr = Integer.parseInt(scanner.nextLine());
+                System.out.print("ID нового викладача: "); int cTId = Integer.parseInt(scanner.nextLine());
+                courseService.updateCourse(cId, cTitle, cCr, cTId);
+                break;
+            case 6:
+                System.out.print("ID курсу для видалення: "); int cDelId = Integer.parseInt(scanner.nextLine());
+                courseService.deleteCourse(cDelId);
+                break;
+            default:
+                System.out.println("Невірний вибір.");
         }
     }
 

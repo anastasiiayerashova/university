@@ -89,6 +89,30 @@ public class CourseService {
         System.out.println("Курс видалено.");
     }
 
+    // filter by teacher
+    public void filterCoursesByTeacher(int teacherId) {
+        boolean found = false;
+        for (int i = 0; i < size; i++) {
+            if (courses[i].getTeacher() != null && courses[i].getTeacher().getId() == teacherId) {
+                System.out.println(courses[i]);
+                found = true;
+            }
+        }
+        if (!found) System.out.println("Курсів для цього викладача не знайдено.");
+    }
+
+    // filter by credits
+    public void filterCoursesByCredits(int credits) {
+        boolean found = false;
+        for (int i = 0; i < size; i++) {
+            if (courses[i].getCredits() == credits) {
+                System.out.println(courses[i]);
+                found = true;
+            }
+        }
+        if (!found) System.out.println("Курсів із такою кількістю кредитів не знайдено.");
+    }
+
     public Course[] getCourses() { return courses; }
     public int getSize() { return size; }
 }
