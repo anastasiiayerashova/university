@@ -1,14 +1,18 @@
 package university;
 import university.enums.TeacherPosition;
 import university.services.CourseService;
+import university.services.EnrollmentService;
 import university.services.StudentService;
 import university.services.TeacherService;
+import university.enums.Grade;
+import university.enums.StudentStatus;
 import java.util.Scanner;
 
 public class Main {
     private static final StudentService studentService = new StudentService();
     private static final TeacherService teacherService = new TeacherService();
     private static final CourseService courseService = new CourseService(teacherService);
+    private static final EnrollmentService enrollmentService = new EnrollmentService(studentService, courseService);
 
     public static final Scanner scanner = new Scanner(System.in);
 
@@ -32,12 +36,8 @@ public class Main {
                     case 1: handleStudentMenu(); break;
                     case 2: handleTeacherMenu(); break;
                     case 3: handleCourseMenu(); break;
-                    case 4:
-                        System.out.println("Цей функціонал буде реалізовано на 16 тижні.");
-                        break;
-                    case 5:
-                        System.out.println("Цей функціонал буде реалізовано на 16 тижні.");
-                        break;
+                    case 4: handleEnrollmentMenu(); break;
+                    case 5: handleReportsMenu(); break;
                     case 0:
                         System.out.println("Завершення програми. Гарного дня!");
                         return;
@@ -57,9 +57,11 @@ public class Main {
     private static void handleStudentMenu() {
         System.out.println("\n--- Меню Студентів ---");
         System.out.println("1. Додати студента");
-        System.out.println("2. Показати всіх");
-        System.out.println("3. Оновити дані");
-        System.out.println("4. Видалити студента");
+        System.out.println("2. Показати всіх (оригінальний порядок)");
+        System.out.println("3. Показати всіх (сортування за ПІБ)");
+        System.out.println("4. Оновити дані");
+        System.out.println("5. Змінити статус студента");
+        System.out.println("6. Видалити студента");
         System.out.print("Вибір: ");
 
         int choice = Integer.parseInt(scanner.nextLine());
@@ -75,13 +77,26 @@ public class Main {
                 studentService.showAllStudents();
                 break;
             case 3:
+                studentService.showStudentsSortedByName();
+                break;
+            case 4:
                 System.out.print("ID студента для оновлення: "); int id = Integer.parseInt(scanner.nextLine());
                 System.out.print("Нове ПІБ: "); String newName = scanner.nextLine();
                 System.out.print("Новий Email: "); String newEmail = scanner.nextLine();
                 System.out.print("Новий рік навчання: "); int newYear = Integer.parseInt(scanner.nextLine());
                 studentService.updateStudent(id, newName, newEmail, newYear);
                 break;
-            case 4:
+            case 5:
+                System.out.print("ID студента: "); int stId = Integer.parseInt(scanner.nextLine());
+                System.out.println("Оберіть статус (1 - ACTIVE, 2 - ON_LEAVE, 3 - EXPELLED, 4 - GRADUATED):");
+                int stChoice = Integer.parseInt(scanner.nextLine());
+                StudentStatus status = StudentStatus.ACTIVE;
+                if (stChoice == 2) status = StudentStatus.ON_LEAVE;
+                if (stChoice == 3) status = StudentStatus.EXPELLED;
+                if (stChoice == 4) status = StudentStatus.GRADUATED;
+                studentService.changeStatus(stId, status);
+                break;
+            case 6:
                 System.out.print("ID студента для видалення: "); int delId = Integer.parseInt(scanner.nextLine());
                 studentService.deleteStudent(delId);
                 break;
@@ -135,10 +150,79 @@ public class Main {
         }
     }
 
+    private static void handleEnrollmentMenu() {
+        System.out.println("\n--- Меню Зарахування ---");
+        System.out.println("1. Зарахувати студента на курс");
+        System.out.println("2. Поставити оцінку за курс");
+        System.out.println("3. Позначити оплату");
+        System.out.println("4. Вивести транскрипт студента (та GPA)");
+        System.out.print("Вибір: ");
+
+        int choice = Integer.parseInt(scanner.nextLine());
+
+        switch (choice) {
+            case 1:
+                System.out.print("ID студента: "); int sId = Integer.parseInt(scanner.nextLine());
+                System.out.print("ID курсу: "); int cId = Integer.parseInt(scanner.nextLine());
+                System.out.print("Семестр (наприклад, 2026-Осінь): "); String sem = scanner.nextLine();
+                enrollmentService.enrollStudent(sId, cId, sem);
+                break;
+            case 2:
+                System.out.print("ID студента: "); int sId2 = Integer.parseInt(scanner.nextLine());
+                System.out.print("ID курсу: "); int cId2 = Integer.parseInt(scanner.nextLine());
+                System.out.print("Оцінка (A, B, C, D, F, NA): "); String gStr = scanner.nextLine().toUpperCase();
+                try {
+                    Grade grade = Grade.valueOf(gStr);
+                    enrollmentService.setGrade(sId2, cId2, grade);
+                }
+                catch (IllegalArgumentException e) {
+                    System.out.println("Помилка: такої оцінки не існує.");
+                }
+                break;
+            case 3:
+                System.out.print("ID студента: "); int sId3 = Integer.parseInt(scanner.nextLine());
+                System.out.print("ID курсу: "); int cId3 = Integer.parseInt(scanner.nextLine());
+                enrollmentService.markAsPaid(sId3, cId3);
+                break;
+            case 4:
+                System.out.print("ID студента: "); int sId4 = Integer.parseInt(scanner.nextLine());
+                enrollmentService.showStudentTranscript(sId4);
+                break;
+            default:
+                System.out.println("Невірний вибір.");
+        }
+    }
+
+    private static void handleReportsMenu() {
+        System.out.println("\n--- Меню Звітів та Пошуку ---");
+        System.out.println("1. Пошук студента за частиною ПІБ або Email");
+        System.out.println("2. Список студентів з неоплаченими курсами");
+        System.out.print("Вибір: ");
+
+        int choice = Integer.parseInt(scanner.nextLine());
+
+        if (choice == 1) {
+            System.out.print("Введіть запит для пошуку: ");
+            String query = scanner.nextLine();
+            studentService.searchStudents(query);
+        } else if (choice == 2) {
+            enrollmentService.showUnpaidEnrollments();
+        } else {
+            System.out.println("Невірний вибір.");
+        }
+    }
+
     private static void initTestData() {
-        studentService.addStudent("Іван Іванов", "ivan@test.com", 1);
-        studentService.addStudent("Марія Петренко", "maria@test.com", 2);
+        studentService.addStudent("Антонов Антон", "anton@test.com", 1);
+        studentService.addStudent("Борисов Борис", "boris@test.com", 2);
+        studentService.addStudent("Сергій Сергій", "ser@test.com", 3);
         teacherService.addTeacher("Дмитро Олександрович", "dmitro@univ.com", TeacherPosition.PROFESSOR);
         courseService.addCourse("Вступ до Java", 5, 1);
+        courseService.addCourse("Math", 4, 1);
+
+        enrollmentService.enrollStudent(1, 1, "2026-1");
+        enrollmentService.enrollStudent(1, 2, "2026-1");
+        enrollmentService.setGrade(1, 1, Grade.A);
+        enrollmentService.setGrade(1, 2, Grade.B);
     }
 }
