@@ -83,6 +83,35 @@ public class StudentService {
         System.out.println("Статус успішно змінено на " + newStatus);
     }
 
+    // fin by name/email
+    public void searchStudents(String query) {
+        boolean found = false;
+        for (int i = 0; i < size; i++) {
+            if (students[i].getName().toLowerCase().contains(query.toLowerCase()) ||
+                    students[i].getEmail().toLowerCase().contains(query.toLowerCase())) {
+                System.out.println(students[i]);
+                found = true;
+            }
+        }
+        if (!found) System.out.println("Записів не знайдено.");
+    }
+
+    // sort by name
+    public void showStudentsSortedByName() {
+        if (size == 0) {
+            System.out.println("Студентів немає.");
+            return;
+        }
+        Student[] sortedCopy = new Student[size];
+        System.arraycopy(students, 0, sortedCopy, 0, size);
+
+        university.util.GPAUtils.sortStudentsByName(sortedCopy, size);
+
+        for (Student s: sortedCopy) {
+            System.out.println(s);
+        }
+    }
+
     public Student[] getStudents() { return students; }
     public int getSize() { return size; }
 }
