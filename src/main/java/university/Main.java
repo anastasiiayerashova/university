@@ -17,7 +17,7 @@ public class Main {
     public static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        initTestData();
+        university.util.DataSeeder.seedData(studentService, teacherService, courseService, enrollmentService);
 
         while (true) {
             try {
